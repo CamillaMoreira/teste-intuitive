@@ -4,12 +4,12 @@ from psycopg2.extras import RealDictCursor
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}) 
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 DB_CONFIG = {
     "dbname": "postgres",
     "user": "postgres",
-    "password": "1112",  
+    "password": "1112",
     "host": "localhost",
     "port": "5432"
 }
@@ -20,25 +20,45 @@ def home():
 
 @app.route("/operadoras", methods=["GET"])
 def buscar_operadora():
-    termo = request.args.get("search", "").strip()
+
+    params = {
+        "param_cod_ans": request.args.get("cod_ans", "").strip(),
+        "param_nome_empresa": request.args.get("nome_empresa", "").strip(),
+        "param_nome_fantasia": request.args.get("nome_fantasia", "").strip(),
+        "param_modalidade": request.args.get("modalidade", "").strip(),
+        "param_endereco": request.args.get("endereco", "").strip(),
+        "param_numero_endereco": request.args.get("numero", "").strip(),
+        "param_complemento_endereco": request.args.get("complemento_endereco", "").strip(),
+        "param_bairro": request.args.get("bairro", "").strip(),
+        "param_cidade": request.args.get("cidade", "").strip(),
+        "param_telefone_contato": request.args.get("telefone_contato", "").strip(),
+        "param_telefone_fax": request.args.get("telefone_fax", "").strip(),
+        "param_email_contato": request.args.get("email_contato", "").strip(),
+        "param_nome_representante": request.args.get("nome_representante", "").strip(),
+        "param_cargo_representante": request.args.get("cargo_representante", "").strip(),
+        "param_identificacao_cnpj": request.args.get("identificacao_cnpj", "").strip(),
+        "param_estado": request.args.get("estado", "").strip()
+    }
+
     limite = request.args.get("limite", 10, type=int)
 
-    if not termo:
-        return jsonify({"error": "Nenhum termo de busca fornecido"}), 400
+    query = "SELECT * FROM buscar_operadoras("
+    query_params = []
+    for key, value in params.items():
+        if value:
+            query += f"{key} := %s, "
+            query_params.append(value)
+
+    query = query.rstrip(", ") + ") LIMIT %s"
+    query_params.append(limite)
 
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
-        cur.execute("""
-            SELECT *
-            FROM operadoras_registradas
-            WHERE nome_fantasia ILIKE %s OR cnpj ILIKE %s
-            ORDER BY nome_fantasia ASC
-            LIMIT %s
-        """, (f"%{termo}%", f"%{termo}%", limite))
-
+        cur.execute(query, query_params)
         resultados = cur.fetchall()
+
         cur.close()
         conn.close()
 
