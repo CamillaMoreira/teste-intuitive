@@ -4,7 +4,7 @@ COPY operadoras_registradas (
     codigo_area, telefone_contato, telefone_fax, email_contato, nome_representante, 
     cargo_representante, regiao_comercializacao, data_registro
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\Relatorio_cadop.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\Relatorio_cadop.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -13,7 +13,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\1T2023.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\1T2023.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -22,7 +22,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\1T2024.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\1T2024.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -31,7 +31,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\2t2023.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\2t2023.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -40,7 +40,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\2T2024.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\2T2024.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -49,7 +49,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\3T2023.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\3T2023.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -58,7 +58,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\3T2024.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\3T2024.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -67,7 +67,7 @@ COPY temp_balancetes_formato_data_especifico (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\4T2023.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\4T2023.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
@@ -76,7 +76,7 @@ COPY temp_balancetes (
     data_balancete, cod_ans, codigo_contabil, descricao_contabil, 
     valor_saldo_inicial, valor_saldo_final
 )
-FROM 'C:\camillaRepos\teste-python\3_donwload\4T2024.csv'
+FROM 'C:\camillaRepos\teste-python\teste3\3_donwload\4T2024.csv'
 DELIMITER ';' 
 CSV HEADER 
 ENCODING 'UTF8';
