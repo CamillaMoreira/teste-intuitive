@@ -101,6 +101,7 @@
         <button @click="buscarOperadoras" :disabled="carregando">{{ carregando ? 'Carregando...' : 'Buscar' }}</button>
         
         <p v-if="carregando" class="loading">Carregando resultados...</p>
+        <p v-if="resultadoTexto">{{resultadoTexto}}</p>
         
         <ul>
             <li v-for="operadora in resultados" :key="operadora.id">
@@ -127,12 +128,14 @@
                     pagina: 1,
                     limite: 10,
                     total_paginas: 1,
-                    carregando: false
+                    carregando: false,
+                    resultadoTexto: '',
                 };
             },
             methods: {
                 async buscarOperadoras() {
                     this.carregando = true;
+                    this.resultadoTexto = '';
                     const query = new URLSearchParams({ ...this.filtros, pagina: this.pagina }).toString();
                     const response = await fetch(`http://localhost:5000/operadoras?${query}`);
                     
@@ -142,6 +145,7 @@
                         this.limite = data.limite;
                         this.total_paginas = data.total_paginas;
                         this.pagina = data.pagina;
+                        this.resultadoTexto = this.resultados.length > 0 ? `${this.resultados.length} operadoras encontradas.` : "Nenhuma operadora encontrada.";
                     } else {
                         alert("Erro ao buscar operadoras.");
                     }
@@ -156,8 +160,6 @@
                 resetarPagina() {
                     this.pagina = 1;
                 }
-            },
-            mounted() {
             }
         }).mount("#app");
     </script>
