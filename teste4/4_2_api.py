@@ -20,7 +20,6 @@ def home():
 
 @app.route("/operadoras", methods=["GET"])
 def buscar_operadora():
-
     params = {
         "param_cod_ans": request.args.get("cod_ans", "").strip(),
         "param_nome_empresa": request.args.get("nome_empresa", "").strip(),
@@ -41,6 +40,8 @@ def buscar_operadora():
     }
 
     limite = request.args.get("limite", 10, type=int)
+    pagina = request.args.get("pagina", 1, type=int)
+    offset = (pagina - 1) * limite
 
     query = "SELECT * FROM buscar_operadoras("
     query_params = []
@@ -49,12 +50,26 @@ def buscar_operadora():
             query += f"{key} := %s, "
             query_params.append(value)
 
-    query = query.rstrip(", ") + ") LIMIT %s"
-    query_params.append(limite)
+    query = query.rstrip(", ") + f") LIMIT %s OFFSET %s"
+    query_params.extend([limite, offset])
+
+    count_query = "SELECT COUNT(*) FROM buscar_operadoras("
+    count_query_params = []
+    for key, value in params.items():
+        if value:
+            count_query += f"{key} := %s, "
+            count_query_params.append(value)
+
+    count_query = count_query.rstrip(", ") + ")"
 
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor(cursor_factory=RealDictCursor)
+
+        cur.execute(count_query, count_query_params)
+        total_registros = cur.fetchone()["count"]
+
+        total_paginas = (total_registros + limite - 1) // limite
 
         cur.execute(query, query_params)
         resultados = cur.fetchall()
@@ -62,7 +77,13 @@ def buscar_operadora():
         cur.close()
         conn.close()
 
-        return jsonify(resultados)
+        return jsonify({
+            "pagina": pagina,
+            "limite": limite,
+            "total_paginas": total_paginas,
+            "total_registros": total_registros,
+            "resultados": resultados
+        })
 
     except psycopg2.Error as e:
         return jsonify({"error": "Erro ao acessar o banco de dados", "details": str(e)}), 500

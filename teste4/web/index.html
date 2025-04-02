@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Operadoras</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .filter-item {
+            flex: 1 1 calc(33.333% - 20px);
+            min-width: 200px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        li {
+            background: #e9ecef;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .pagination {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .loading {
+            font-size: 14px;
+            color: #007BFF;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Busca de Operadoras</h1>
+        <p>Filtre operadoras registradas</p>
+        
+        <div class="filters">
+            <input class="filter-item" v-model="filtros.cod_ans" @input="resetarPagina" placeholder="Código ANS">
+            <input class="filter-item" v-model="filtros.nome_empresa" @input="resetarPagina" placeholder="Nome da Empresa">
+            <input class="filter-item" v-model="filtros.nome_fantasia" @input="resetarPagina" placeholder="Nome Fantasia">
+            <input class="filter-item" v-model="filtros.modalidade" @input="resetarPagina" placeholder="Modalidade">
+            <input class="filter-item" v-model="filtros.endereco" @input="resetarPagina" placeholder="Endereço">
+            <input class="filter-item" v-model="filtros.numero" @input="resetarPagina" placeholder="Número">
+            <input class="filter-item" v-model="filtros.complemento_endereco" @input="resetarPagina" placeholder="Complemento">
+            <input class="filter-item" v-model="filtros.bairro" @input="resetarPagina" placeholder="Bairro">
+            <input class="filter-item" v-model="filtros.cidade" @input="resetarPagina" placeholder="Cidade">
+            <input class="filter-item" v-model="filtros.telefone_contato" @input="resetarPagina" placeholder="Telefone Contato">
+            <input class="filter-item" v-model="filtros.telefone_fax" @input="resetarPagina" placeholder="Telefone Fax">
+            <input class="filter-item" v-model="filtros.email_contato" @input="resetarPagina" placeholder="E-mail Contato">
+            <input class="filter-item" v-model="filtros.nome_representante" @input="resetarPagina" placeholder="Nome Representante">
+            <input class="filter-item" v-model="filtros.cargo_representante" @input="resetarPagina" placeholder="Cargo Representante">
+            <input class="filter-item" v-model="filtros.identificacao_cnpj" @input="resetarPagina" placeholder="CNPJ">
+            <input class="filter-item" v-model="filtros.estado" @input="resetarPagina" placeholder="Estado (UF)">
+        </div>
+        
+        <button @click="buscarOperadoras" :disabled="carregando">{{ carregando ? 'Carregando...' : 'Buscar' }}</button>
+        
+        <p v-if="carregando" class="loading">Carregando resultados...</p>
+        
+        <ul>
+            <li v-for="operadora in resultados" :key="operadora.id">
+                <strong>{{ operadora.nome_empresa }}</strong> - {{ operadora.estado }} - {{ operadora.cidade }}<br />
+                {{ operadora.nome_fantasia ? "Nome fantasia: " + operadora.nome_fantasia : "" }}
+            </li>
+        </ul>
+        
+        <div class="pagination" v-if="total_paginas > 1">
+            <button @click="alterarPagina(pagina - 1)" :disabled="pagina === 1 || carregando">{{ carregando ? 'Carregando...' : 'Anterior' }}</button>
+            <span>Página {{ pagina }} de {{ total_paginas }}</span>
+            <button @click="alterarPagina(pagina + 1)" :disabled="pagina >= total_paginas || carregando">{{ carregando ? 'Carregando...' : 'Próxima' }}</button>
+        </div>
+    </div>
+    
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    filtros: {},
+                    resultados: [],
+                    pagina: 1,
+                    limite: 10,
+                    total_paginas: 1,
+                    carregando: false
+                };
+            },
+            methods: {
+                async buscarOperadoras() {
+                    this.carregando = true;
+                    const query = new URLSearchParams({ ...this.filtros, pagina: this.pagina }).toString();
+                    const response = await fetch(`http://localhost:5000/operadoras?${query}`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.resultados = data.resultados || [];
+                        this.limite = data.limite;
+                        this.total_paginas = data.total_paginas;
+                        this.pagina = data.pagina;
+                    } else {
+                        alert("Erro ao buscar operadoras.");
+                    }
+                    this.carregando = false;
+                },
+                alterarPagina(novaPagina) {
+                    if (novaPagina >= 1 && novaPagina <= this.total_paginas) {
+                        this.pagina = novaPagina;
+                        this.buscarOperadoras();
+                    }
+                },
+                resetarPagina() {
+                    this.pagina = 1;
+                }
+            },
+            mounted() {
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
