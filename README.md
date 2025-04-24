@@ -1,8 +1,8 @@
-Teste Intuitive
+# Teste Intuitive
 
 Este repositório contém soluções para os desafios propostos no processo seletivo da Intuitive. Os exercícios foram desenvolvidos utilizando a linguagem Python e abordam temas como algoritmos, estruturas de dados e lógica de programação.
 
-Desafios 
+📋 Desafios 
 
 • Implementação de algoritmos eficientes para resolução de problemas específicos.
 
