@@ -5,7 +5,10 @@ Este repositório contém soluções para os desafios propostos no processo sele
 Desafios 
 
 • Implementação de algoritmos eficientes para resolução de problemas específicos.
+
 • Utilização de estruturas de dados adequadas para cada contexto.
+
 • Aplicação de boas práticas de codificação e organização do código.
+
 
 
