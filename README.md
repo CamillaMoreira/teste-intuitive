@@ -1,14 +1,31 @@
-# Teste Intuitive
+#  Teste Intuitive
 
-Este repositório contém soluções para os desafios propostos no processo seletivo da Intuitive. Os exercícios foram desenvolvidos utilizando a linguagem Python e abordam temas como algoritmos, estruturas de dados e lógica de programação.
+Este repositório contém soluções para os desafios propostos no processo seletivo da Intuitive. Os exercícios foram desenvolvidos utilizando Python e Vue.js, abordando temas como Web Scraping, Transformação de Dados, Banco de Dados e APIs.
 
-📋 Desafios 
+🎯 Desafios
 
-• Implementação de algoritmos eficientes para resolução de problemas específicos.
+● Web Scraping com Python
 
-• Utilização de estruturas de dados adequadas para cada contexto.
+● Transformação e limpeza de dados
 
-• Aplicação de boas práticas de codificação e organização do código.
+● Integração com banco de dados PostgreSQL
 
+● Criação de APIs RESTful
 
+● Interface web com Vue.js
 
+🛠️ Tecnologias Utilizadas
+
+● Python 3.x
+
+● Vue.js
+
+● PostgreSQL
+
+🤝 Contribuições
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+📄 Licença
+
+Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
